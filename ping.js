@@ -29,11 +29,20 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
 app.post('/ping', (req, res) => {
-    const ipAddress = req.body.ipAddress;
+    const ipAddresses = req.body.ipAddresses.split('\n').map(ip => ip.trim());
 
-    ping.sys.probe(ipAddress, (isAlive) => {
-        const status = isAlive ? 'alive' : 'dead';
-        res.send(`IP ${ipAddress} is ${status}`);
+    const results = [];
+
+    ipAddresses.forEach(ipAddress => {
+        ping.sys.probe(ipAddress, (isAlive) => {
+            const status = isAlive ? 'alive' : 'dead';
+            results.push(`IP ${ipAddress} is ${status}`);
+            
+            if (results.length === ipAddresses.length) {
+                // When all pings are done, send the results as a response
+                res.send(results.join('\n'));
+            }
+        });
     });
 });
 

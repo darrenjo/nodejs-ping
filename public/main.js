@@ -4,17 +4,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     pingForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const ipAddress = document.getElementById('ipAddress').value;
+        const ipAddresses = document.getElementById('ipAddresses').value;
         fetch('/ping', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `ipAddress=${encodeURIComponent(ipAddress)}`,
+            body: `ipAddresses=${encodeURIComponent(ipAddresses)}`,
         })
         .then(response => response.text())
         .then(result => {
-            pingResult.textContent = result;
+            // Split the result by newline and create a <p> element for each line
+            const resultLines = result.split('\n');
+            const resultHTML = resultLines.map(line => `<p>${line}</p>`).join('');
+            pingResult.innerHTML = resultHTML;
         });
     });
 });

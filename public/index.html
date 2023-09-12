@@ -8,9 +8,9 @@
 </head>
 <body>
     <h1>IP Ping</h1>
-    <form id="pingForm">
-        <label for="ipAddress">Enter an IP address to ping:</label>
-        <input type="text" id="ipAddress" name="ipAddress" required>
+    <form id="pingForm" method="POST" action="/ping"> <!-- Updated form action -->
+        <label for="ipAddresses">Enter IP addresses to ping (separated by newlines):</label>
+        <textarea id="ipAddresses" name="ipAddresses" rows="5" required></textarea> <!-- Updated input name -->
         <button type="submit">Ping</button>
     </form>
     <div id="pingResult"></div>
